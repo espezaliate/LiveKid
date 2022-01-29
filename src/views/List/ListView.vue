@@ -15,7 +15,11 @@
          :config="tableConfig"
          @select="handleRowClick"
       />
-      <Modal :class="{ 'is-active': showModal }" :row='row'/>
+      <Modal
+         :class="{ 'is-active': showModal }"
+         :row="row"
+         @cancel="handleFormChange"
+      />
    </div>
 </template>
 <script>
@@ -65,12 +69,17 @@ export default {
          state.initLoading = false
       })
 
-      const handleRowClick = (row) => {
+      const handleRowClick = row => {
          state.showModal = true
          state.row = row
+         console.log(row)
       }
 
-      return { ...toRefs(state), tableContent, tableConfig, onInput, handleRowClick }
+      const handleFormChange = cancel => {
+         state.showModal = cancel
+      }
+
+      return { ...toRefs(state), tableContent, tableConfig, onInput, handleRowClick, handleFormChange }
    }
 }
 </script>
