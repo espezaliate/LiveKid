@@ -10,17 +10,23 @@
             />
          </div>
       </div>
-      <Table :content="tableContent" :config="tableConfig" />
+      <Table
+         :content="tableContent"
+         :config="tableConfig"
+         @select="handleRowClick"
+      />
+      <Modal :class="{ 'is-active': showModal }" :row='row'/>
    </div>
 </template>
 <script>
 import Table from '@/components/Table.vue'
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, toRefs } from 'vue'
 import { filterList, mapList } from './listHelper'
 import dummy from '@/assets/dummy.json'
 import timeout from 'q'
+import Modal from './components/Modal'
 export default {
-   components: { Table },
+   components: { Table, Modal },
    setup() {
       const tableConfig = {
          columns: [
@@ -35,7 +41,9 @@ export default {
          items: [],
          initLoading: true,
          search: '',
-         timeout
+         timeout,
+         showModal: false,
+         row: null
       })
       const tableContent = computed(() =>
          state.items.filter(item => filterList(item, state.search)).map(mapList)
@@ -54,9 +62,15 @@ export default {
       }
       onMounted(async () => {
          await mockRequest()
-         state.loading = false
+         state.initLoading = false
       })
-      return { tableContent, tableConfig, onInput }
+
+      const handleRowClick = (row) => {
+         state.showModal = true
+         state.row = row
+      }
+
+      return { ...toRefs(state), tableContent, tableConfig, onInput, handleRowClick }
    }
 }
 </script>
