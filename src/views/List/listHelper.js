@@ -10,7 +10,6 @@ export const filterList = (item, search) => {
    )
 }
 export const mapList = item => {
-   console.log(item)
    const tags_display = item.tags.join(', ')
    const cords_display = item.cords.join(', ')
    return { ...item, tags_display, cords_display }

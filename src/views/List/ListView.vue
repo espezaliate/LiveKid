@@ -15,7 +15,7 @@
          :config="tableConfig"
          @select="handleRowClick"
       />
-      <Modal
+      <ListModal
          :class="{ 'is-active': showModal }"
          :row="row"
          @formClose="handleFormClose"
@@ -29,9 +29,9 @@ import { computed, onMounted, reactive, toRefs } from 'vue'
 import { filterList, mapList } from './listHelper'
 import dummy from '@/assets/dummy.json'
 import timeout from 'q'
-import Modal from './components/Modal'
+import ListModal from './components/ListModal'
 export default {
-   components: { Table, Modal },
+   components: { Table, ListModal },
    setup() {
       const tableConfig = {
          columns: [
@@ -79,21 +79,19 @@ export default {
          state.showModal = close
       }
 
-      const handleFormSave = (name, status, id) => {
+      const handleFormSave = (name, status, id, close) => {
          state.items.forEach(e => {
-            console.log(e.id, id)
             if (e.id === id) {
                if (name) {
                   e.name = name
-                  console.log(state.items)
                }
                if (status) {
                   e.status = status
-                  console.log(state.row.status)
                }
             }
          })
-}
+         state.showModal = close
+      }
 
       return {
          ...toRefs(state),
