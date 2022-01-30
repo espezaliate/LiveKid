@@ -14,11 +14,13 @@
          :content="tableContent"
          :config="tableConfig"
          @select="handleRowClick"
+         @update="tableContent"
       />
       <Modal
          :class="{ 'is-active': showModal }"
          :row="row"
-         @cancel="handleFormChange"
+         @formClose="handleFormClose"
+         @formSave="handleFormSave"
       />
    </div>
 </template>
@@ -70,16 +72,34 @@ export default {
       })
 
       const handleRowClick = row => {
-         state.showModal = true
          state.row = row
-         console.log(row)
+         state.showModal = true
       }
 
-      const handleFormChange = cancel => {
-         state.showModal = cancel
+      const handleFormClose = close => {
+         state.showModal = close
       }
 
-      return { ...toRefs(state), tableContent, tableConfig, onInput, handleRowClick, handleFormChange }
+      const handleFormSave = (name, status) => {
+         if(name){
+            state.row.name = name
+            console.log(state.row)
+         }
+         if(status){
+            state.row.status = status
+            console.log(state.row.status)
+         }
+      }
+
+      return {
+         ...toRefs(state),
+         tableContent,
+         tableConfig,
+         onInput,
+         handleRowClick,
+         handleFormClose,
+         handleFormSave
+      }
    }
 }
 </script>

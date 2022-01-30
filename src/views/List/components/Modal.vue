@@ -1,23 +1,51 @@
 <template>
    <div class="modal">
-      <div class="modal-background has-background-grey" @click="handleCancel"></div>
-      <div class="modal-card">
+      <div
+         class="modal-background has-background-grey"
+         @click="handleClose"
+      ></div>
+      <div class="modal-card ">
          <header class="modal-card-head">
             <p class="modal-card-title is-size-3">Edit Data</p>
             <button
                class="delete is-medium"
                aria-label="close"
-               @click="handleCancel"
+               @click="handleClose"
             ></button>
          </header>
          <section class="modal-card-body">
-            {{ row }}
+            <input
+               class="input is-size-5 text-align"
+               :value="row ? row.name : ''"
+               ref="nameInput"
+               @input="storeNameChange"
+            />
+            <div class="select mt-5 is-size-5">
+               <select
+                  :value="row ? row.status : ''"
+                  @change="storeStatusChange"
+               >
+                  <option>{{ row ? row.status : '' }}</option>
+                  <option>{{
+                     row
+                        ? row.status === 'verified'
+                           ? 'unverified'
+                           : 'verified'
+                        : ''
+                  }}</option>
+               </select>
+            </div>
          </section>
          <footer class="modal-card-foot is-flex is-justify-content-center">
-            <button class="button is-success" @click="handleSave">
-               Save changes
+            <button
+               class="button is-success is-size-5 mr-5"
+               @click="handleSave"
+            >
+               Save
             </button>
-            <button class="button" @click="handleCancel">Cancel</button>
+            <button class="button is-size-5" @click="handleClose">
+               Cancel
+            </button>
          </footer>
       </div>
    </div>
@@ -31,12 +59,18 @@ export default {
          default: () => ({})
       }
    },
-   emits: ['cancel'],
    setup(props, { emit }) {
-      const handleSave = () => console.log(props.row)
-      const handleCancel = () => emit('cancel', false)
-
-      return { handleSave, handleCancel }
+      let name = ''
+      let status = ''
+      const storeNameChange = e => {
+         name = e.target.value
+      }
+      const storeStatusChange = e => {
+         status = e.target.value
+      }
+      const handleSave = () => emit('formSave', name, status)
+      const handleClose = () => emit('formClose', false)
+      return { handleSave, handleClose, storeNameChange, storeStatusChange }
    }
 }
 </script>
