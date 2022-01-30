@@ -68,7 +68,7 @@ export default {
       const storeStatusChange = e => {
          status = e.target.value
       }
-      const handleSave = () => emit('formSave', name, status)
+      const handleSave = () => emit('formSave', name, status, props.row.id)
       const handleClose = () => emit('formClose', false)
       return { handleSave, handleClose, storeNameChange, storeStatusChange }
    }

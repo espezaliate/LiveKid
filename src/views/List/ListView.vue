@@ -14,7 +14,6 @@
          :content="tableContent"
          :config="tableConfig"
          @select="handleRowClick"
-         @update="tableContent"
       />
       <Modal
          :class="{ 'is-active': showModal }"
@@ -80,16 +79,21 @@ export default {
          state.showModal = close
       }
 
-      const handleFormSave = (name, status) => {
-         if(name){
-            state.row.name = name
-            console.log(state.row)
-         }
-         if(status){
-            state.row.status = status
-            console.log(state.row.status)
-         }
-      }
+      const handleFormSave = (name, status, id) => {
+         state.items.forEach(e => {
+            console.log(e.id, id)
+            if (e.id === id) {
+               if (name) {
+                  e.name = name
+                  console.log(state.items)
+               }
+               if (status) {
+                  e.status = status
+                  console.log(state.row.status)
+               }
+            }
+         })
+}
 
       return {
          ...toRefs(state),
